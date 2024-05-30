@@ -1,10 +1,12 @@
-REPO ?= denstorti
+include .env
 
-CDKTF_VERSION ?= 0.20.1
-TF_VERSION ?= 1.7.4
+REPO ?= phillik747
 
-IMAGE_NAME ?= cdktf-cli
-DOCKER_HUB_TOKEN ?=
+CDKTF_VERSION: ${CDKTF_VERSION}
+TF_VERSION: ${TF_VERSION}
+
+IMAGE_NAME ?= cdktf-cli-pydeploy
+DOCKER_HUB_TOKEN: ${DOCKER_HUB_TOKEN}
 
 COMPOSE_ALPINE = docker compose run --rm alpine
 
@@ -25,7 +27,7 @@ build:
 push:
 	docker login --username ${REPO} --password ${DOCKER_HUB_TOKEN}
 	docker push ${REPO}/${IMAGE_NAME}:${CDKTF_VERSION}
-	docker push ${REPO}/${IMAGE_NAME}:latest
+	#docker push ${REPO}/${IMAGE_NAME}:latest
 
 run: 
 	docker run --rm ${IMAGE_NAME}:${CDKTF_VERSION} cdktf --version
