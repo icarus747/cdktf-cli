@@ -18,8 +18,20 @@ Image contains:
 
 Run the container:
 
+Make sure `.venv` is not located in the project directory otherwise pipenv will use that as its library source and cause issues with project resources within terraform. If it exists, you can rename/delete the directory. The pipenv source in the container is under `~/.local/share/virtualenvs/...`. 
+
+If pipenv is run natively (to use vscode on python files), ensure the following is added to your `.bashrc`. This will install pipenv outside of the project folder as to not conflict with the container. 
 ```
-docker run -it --rm -v $(pwd):/src -w '/src' cdktf-cli:latest sh
+export PIPENV_VENV_IN_PROJECT=0
+```
+pwd is the location of the cdktf project directory. The following will let you enter the container. Append with `cdktf` to run cdktf within the container. 
+```
+docker run -it --rm -v $(pwd):/src -w '/src' --network=host cdktf-cli:latest
+```
+
+I recommend that you create an alias in `.bashrc` that will run the container with the cdktf command
+```
+alias cdktf="docker run --rm -it -v $(pwd):/src -w '/src' --network=host cdktf-cli:latest cdktf"
 ```
 
 Initialise cdktf:
