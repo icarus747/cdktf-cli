@@ -12,6 +12,7 @@ pyyaml = "*"
 python-dotenv = "*"
 exceptiongroup = "*"
 flake8 = "*"
+requests = "*"
 
 [dev-packages]
 pytest = "*"
