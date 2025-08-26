@@ -1,9 +1,9 @@
 FROM python:3.10
 
 # If using Makefile, create these in a .env file
-ARG CDKTF_VERSION='0.20.1'
+ARG CDKTF_VERSION='0.20.8'
 ENV CDKTF_VERSION=$CDKTF_VERSION
-ARG TF_VERSION='1.7.4'
+ARG TF_VERSION='1.9.3'
 ENV TF_VERSION=$TF_VERSION
 
 # User settings, Chagne as needed
@@ -23,21 +23,25 @@ LABEL name="cdktf-cli"
 LABEL version=${CDKTF_VERSION}
 
 # Install needed programs/tools
+RUN curl -sL https://deb.nodesource.com/setup_22.x | bash -
 RUN apt-get update && \
     apt-get install -y \
-      npm \
+    #   npm \
+      nodejs \
       curl \
       unzip \
     && \
     apt-get autoremove -y && \
-    apt-get clean -y && \
-    true
+    apt-get clean -y 
 
 # Install pip, cdktf, pipenv, terraform
-RUN pip install --upgrade pip
+RUN pip install --no-cache-dir --upgrade pip pipenv
+
+RUN npm install -g npm@latest
 RUN npm install --global cdktf-cli@${CDKTF_VERSION}
-RUN pip3 install --no-cache-dir -U pipenv \
-        && curl -o terraform.zip https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip \
+# RUN pip3 install --no-cache-dir -U pipenv
+
+RUN curl -o terraform.zip https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip \
         && unzip -o terraform.zip \
         && rm terraform.zip \
         && mv terraform /usr/local/bin/
@@ -68,7 +72,8 @@ COPY Pipfile* /home/pydeploy/neteng_aci_labs
 # RUN echo "PIPENV_VENV_IN_PROJECT=1" >> /home/pydeploy/neteng_aci_labs/.env
 
 # Installs the pip libraries in ~/.local/share/virtualenvs/...  if not using the line above. Else it will be in the project dir as .vevn
-RUN pipenv install --dev --skip-lock
+RUN pipenv install 
+# --dev --skip-lock
 
 CMD ["bash"]
 

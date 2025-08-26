@@ -54,3 +54,11 @@ Push:
 ```
 make push
 ```
+# Check for updates
+New versions:
+```
+curl -sl https://api.github.com/repos/hashicorp/terraform-cdk/releases/latest | jq -r '.tag_name' | tr -d "v"
+curl -sl https://api.github.com/repos/CiscoDevNet/terraform-provider-mso/releases/latest | jq -r '.tag_name' | tr -d "v"
+curl -sl https://api.github.com/repos/CiscoDevNet/terraform-provider-aci/releases/latest | jq -r '.tag_name' | tr -d "v"
+curl -sl https://api.github.com/repos/hashicorp/terraform/releases/latest | jq -r '.tag_name' | tr -d "v"
+```

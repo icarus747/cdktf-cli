@@ -34,5 +34,12 @@ run:
 	docker run --rm ${IMAGE_NAME}:${CDKTF_VERSION} terraform --version
 
 check_new_version:
-	docker compose build alpine
-	$(COMPOSE_ALPINE) bash scripts/check_new_version.sh
+	@echo "cdktf" && curl -sl https://api.github.com/repos/hashicorp/terraform-cdk/releases/latest | jq -r '.tag_name' | tr -d "v"
+	@echo ""
+	@echo "provider mso" && curl -sl https://api.github.com/repos/CiscoDevNet/terraform-provider-mso/releases/latest | jq -r '.tag_name' | tr -d "v"
+	@echo ""
+	@echo "provider aci" && curl -sl https://api.github.com/repos/CiscoDevNet/terraform-provider-aci/releases/latest | jq -r '.tag_name' | tr -d "v"
+	@echo ""
+	@echo "terraform" && curl -sl https://api.github.com/repos/hashicorp/terraform/releases/latest | jq -r '.tag_name' | tr -d "v"
+# 	docker compose build alpine
+# 	$(COMPOSE_ALPINE) bash scripts/check_new_version.sh
